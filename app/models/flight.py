@@ -8,5 +8,5 @@ class Flight(ModelMixin):
     __tablename__ = 'flight'
 
     flight_number = db.Column(db.String(120), unique=True, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship("User", back_populates="flight")
+    capacity = db.Column(db.Integer, default=62)
+    bookings = db.relationship("Booking", backref="flight", lazy="dynamic")

@@ -27,6 +27,7 @@ class DevelopmentConfiguration(Config):
 class TestingConfiguration(Config):
     """Testing configuration class."""
     TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///flight_testing_db'
 
 
 class ProductionConfiguration(Config):
