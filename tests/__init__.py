@@ -24,10 +24,14 @@ class BaseTestCase(TestCase):
     def register_user(self, username=None, password=None, name=None):
         return self.client.post(
             '/api/v1/auth/register',
-            data=json.dumps(dict(
-                username=username,
-                password=password,
-                name=name
-            )),
+            data=json.dumps(
+                dict(username=username, password=password, name=name)),
+            content_type='application/json',
+        )
+
+    def login_user(self, username=None, password=None):
+        return self.client.post(
+            '/api/v1/auth/login',
+            data=json.dumps(dict(username=username, password=password)),
             content_type='application/json',
         )

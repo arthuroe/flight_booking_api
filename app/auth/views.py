@@ -13,7 +13,6 @@ class RegisterView(MethodView):
 
     def post(self):
         post_data = request.json
-
         username = post_data.get('username')
         name = post_data.get('name')
         password = post_data.get('password')
@@ -52,3 +51,46 @@ class RegisterView(MethodView):
                 'message': 'User already exists. Please log in.',
             }
             return make_response(jsonify(response)), 409
+
+
+class LoginView(MethodView):
+    """
+    View to login the user
+    """
+
+    def post(self):
+        post_data = request.json
+        username = post_data.get('username')
+        password = post_data.get('password')
+
+        if not username or not password:
+            response = {
+                'status': 'fail',
+                'message': 'Username or password not provided.'
+            }
+            return make_response(jsonify(response)), 400
+
+        try:
+            user = User.find_first(username=username)
+            if user and user.password_is_valid(password):
+                auth_token = user.generate_token(user.id)
+                if auth_token:
+                    response = {
+                        'status': 'success',
+                        'message': 'Successfully logged in.',
+                        'auth_token': auth_token.decode()
+                    }
+                    return make_response(jsonify(response)), 200
+            else:
+                response = {
+                    'status': 'fail',
+                    'message': 'User does not exist.'
+                }
+                return make_response(jsonify(response)), 401
+        except Exception as e:
+            logging.error(f"An error has occurred  {e}")
+            response = {
+                'status': 'fail',
+                'message': 'An error has occurred. Please try again.'
+            }
+            return make_response(jsonify(response)), 500
