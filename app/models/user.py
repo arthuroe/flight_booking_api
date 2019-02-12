@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from flask_bcrypt import Bcrypt
 
 from .model_mixin import db, ModelMixin
+from app import app
 
 
 class User(ModelMixin):
@@ -16,14 +17,11 @@ class User(ModelMixin):
     username = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(120), nullable=False)
-    flight = db.relationship(
-        "Flight", uselist=False, back_populates="user",
-        cascade="all, delete-orphan"
-    )
+    bookings = db.relationship('Booking', backref='user', lazy='dynamic')
 
     def __init__(self, username, password, name):
         """
-        Initialize the user instance
+        Initializes the user instance
         """
         self.username = username
         self.password = Bcrypt().generate_password_hash(password).decode()
@@ -38,16 +36,14 @@ class User(ModelMixin):
     @staticmethod
     def generate_token(user_id):
         """
-        Generates the access token
+        Generate access token
         """
         try:
-            # set up a payload with an expiration time
             payload = {
                 'exp': datetime.utcnow() + timedelta(hours=4),
                 'iat': datetime.utcnow(),
                 'sub': user_id
             }
-            # create the byte string token using the payload and the SECRET key
             jwt_string = jwt.encode(
                 payload,
                 app.config.get('SECRET_KEY'),
@@ -56,8 +52,7 @@ class User(ModelMixin):
             return jwt_string
 
         except Exception as e:
-            logging.error(f"An error while generating a token - {e}")
-            # return an error in string format if an exception occurs
+            logging.error(f"An error while generating a token {e}")
             return str(e)
 
     @staticmethod
@@ -66,12 +61,9 @@ class User(ModelMixin):
         Decodes the access token from the Authorization header.
         """
         try:
-            # decode the token using the SECRET environment variable
             payload = jwt.decode(token, app.config.get('SECRET_KEY'))
             return payload['sub']
         except jwt.ExpiredSignatureError:
-            # the token is expired, return an error string
             return "Expired token. Please login to get a new token"
         except jwt.InvalidTokenError:
-            # the token is invalid, return an error string
             return "Invalid token. Please register or login"
