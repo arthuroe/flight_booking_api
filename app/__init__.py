@@ -15,7 +15,9 @@ app.config.from_object(app_configuration[environment])
 
 from app.models import db
 from app.auth import auth_blueprint
+from app.flights import flight_blueprint
 
 db.init_app(app)
 
 app.register_blueprint(auth_blueprint)
+app.register_blueprint(flight_blueprint)

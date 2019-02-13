@@ -1,6 +1,7 @@
 from flask import Blueprint
 
 from app.auth.views import RegisterView, LoginView
+from app.auth.helper import token_required
 
 auth_blueprint = Blueprint('auth', __name__, url_prefix='/api/v1')
 registration_view = RegisterView.as_view('register_api')
