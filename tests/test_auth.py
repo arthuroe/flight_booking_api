@@ -11,7 +11,7 @@ class TestAuth(BaseTestCase):
         """
         Test for successful user registration
         """
-        response = self.register_user('test', 'testing', 'test')
+        response = self.register_user('test@gmail.com', 'tesTing123', 'test')
         data = json.loads(response.data.decode())
         self.assertTrue(data['status'] == 'success')
         self.assertTrue(data['message'] == 'Successfully registered.')
@@ -22,9 +22,10 @@ class TestAuth(BaseTestCase):
         """
         Test registration with an already registered username fails
         """
-        user = User(username='test', password='test', name='test')
+        user = User(username='test@gmail.com',
+                    password='tesTing123', name='test')
         user.save()
-        response = self.register_user('test', 'test', 'test')
+        response = self.register_user('test@gmail.com', 'tesTing123', 'test')
         data = json.loads(response.data.decode())
         self.assertTrue(data['status'] == 'fail')
         self.assertTrue(
@@ -35,7 +36,7 @@ class TestAuth(BaseTestCase):
         """
         Test for Incomplete input during registration
         """
-        response = self.register_user('test', 'test')
+        response = self.register_user('testing@gmail.com', 'testIng123')
         data = json.loads(response.data.decode())
         self.assertTrue(data['status'] == 'fail')
         self.assertTrue(data['message'] == 'Incomplete data. Username, name and '
@@ -46,8 +47,8 @@ class TestAuth(BaseTestCase):
         """
         Test for successful user registration
         """
-        response1 = self.register_user('test', 'testing', 'test')
-        response = self.login_user('test', 'testing')
+        response1 = self.register_user('test@gmail.com', 'tesTing123', 'test')
+        response = self.login_user('test@gmail.com', 'tesTing123')
         data = json.loads(response.data.decode())
         self.assertTrue(data['status'] == 'success')
         self.assertTrue(data['message'] == 'Successfully logged in.')
@@ -58,7 +59,7 @@ class TestAuth(BaseTestCase):
         """
         Test that login of a non-registered user fails
         """
-        response = self.login_user('test', 'test')
+        response = self.login_user('test@gmail.com', 'tesTing123')
         data = json.loads(response.data.decode())
         self.assertTrue(data['status'] == 'fail')
         self.assertTrue(data['message'] == 'User does not exist.')
@@ -69,10 +70,34 @@ class TestAuth(BaseTestCase):
         """
         Test that a user cannot login with missing credentials
         """
-        response = self.login_user('test')
+        response = self.login_user('test@gmail.com')
         data = json.loads(response.data.decode())
         self.assertTrue(data['status'] == 'fail')
         self.assertTrue(data['message'] ==
                         'Username or password not provided.')
+        self.assertTrue(response.content_type == 'application/json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_validations_on_login(self):
+        """
+        Test validations on user input when logging in.
+        """
+        response = self.login_user('test', '12344')
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['status'] == 'fail')
+        self.assertTrue(data['message'] ==
+                        'Invalid Username or password provided')
+        self.assertTrue(response.content_type == 'application/json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_validations_on_register(self):
+        """
+        Test validations on user input when registering.
+        """
+        response = self.register_user('test@gmail.com', 'tes123', 'test')
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['status'] == 'fail')
+        self.assertTrue(data['message'] ==
+                        'Invalid Email or password provided')
         self.assertTrue(response.content_type == 'application/json')
         self.assertEqual(response.status_code, 400)

@@ -9,8 +9,8 @@ class TestFlight(BaseTestCase):
         """
         Test to see available flights
         """
-        response1 = self.register_user('test', 'testing', 'test')
-        response2 = self.login_user('test', 'testing')
+        response1 = self.register_user('test@gmail.com', 'tesTing123', 'test')
+        response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
         response = self.client.get(
             '/api/v1/flights', headers=dict(Authorization="Bearer " + access_token,
