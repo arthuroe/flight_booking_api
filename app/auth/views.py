@@ -3,6 +3,7 @@ import logging
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
+from .helper import *
 from app.models import User
 
 
@@ -22,6 +23,15 @@ class RegisterView(MethodView):
                 'status': 'fail',
                 'message': ('Incomplete data. Username, name and '
                             'password must be provided')
+            }
+            return make_response(jsonify(response)), 400
+
+        if not validate_email(username) or not validate_password(password):
+            response = {
+                'status': 'fail',
+                'message': ('Invalid Email or password provided'),
+                'required': ('Passwords should be at least 8 characters, contain'
+                             ' a digit, uppercase and lowercase characters')
             }
             return make_response(jsonify(response)), 400
 
@@ -67,6 +77,13 @@ class LoginView(MethodView):
             response = {
                 'status': 'fail',
                 'message': 'Username or password not provided.'
+            }
+            return make_response(jsonify(response)), 400
+
+        if not validate_email(username):
+            response = {
+                'status': 'fail',
+                'message': 'Invalid Username or password provided'
             }
             return make_response(jsonify(response)), 400
 
