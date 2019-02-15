@@ -5,6 +5,7 @@ def get_available_flights():
     all_flights = Flight.fetch_all()
     all_bookings = Booking.fetch_all()
     available = []
+
     for flight in all_flights:
         if check_flight_is_available(flight):
             available.append(flight)
@@ -12,7 +13,7 @@ def get_available_flights():
 
 
 def check_flight_is_available(flight):
-    bookings = Booking.filter(flight.id)
-    if flight.capacity < len(bookings):
+    bookings = Booking.filter_by(flight_id=flight.id)
+    if flight.capacity > bookings.count():
         return True
     return False

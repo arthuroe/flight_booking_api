@@ -12,12 +12,12 @@ class User(ModelMixin):
     """
     User model attributes
     """
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
     username = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(120), nullable=False)
-    bookings = db.relationship('Booking', backref='user', lazy='dynamic')
+    bookings = db.relationship('Booking', backref='users', lazy='dynamic')
 
     def __init__(self, username, password, name):
         """
