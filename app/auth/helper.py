@@ -35,6 +35,8 @@ def token_required(func):
         try:
             decode_response = User.decode_token(token)
             current_user = User.query.filter_by(id=decode_response).first()
+            # current_user = current_user.__dict__
+            # kwargs['user'] = current_user
         except:
             message = 'Invalid token'
             if isinstance(decode_response, str):
@@ -44,7 +46,7 @@ def token_required(func):
                 'message': message
             })), 401
         return func(current_user, *args, **kwargs)
-
+    # func.__doc__ = func.__doc__
     return decorated_function
 
 
