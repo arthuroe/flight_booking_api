@@ -1,9 +1,12 @@
+import logging
+
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from app.auth import token_required
 from app.flights import check_flight_is_available
 from app.models import Booking, Flight
+from app.notifications import send_email
 
 
 class BookingView(MethodView):
@@ -35,7 +38,8 @@ class BookingView(MethodView):
             try:
                 booking = Booking(flight_id=flight_id, user_id=user_id)
                 booking.save()
-
+                send_email('Booking', [current_user.username],
+                           'TEST', 'Booked Successfully')
                 response = {
                     'status': 'success',
                     'message': 'Successfully booked flight.'
