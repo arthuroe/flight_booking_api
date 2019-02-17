@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/arthuroe/flight_booking_api.svg?branch=develop)](https://travis-ci.org/arthuroe/flight_booking_api)
+[![Coverage Status](https://coveralls.io/repos/github/arthuroe/flight_booking_api/badge.svg?branch=develop)](https://coveralls.io/github/arthuroe/flight_booking_api?branch=develop)
+
 ### Flight Booking API
 
 This application enables a user to check and book available flights.
