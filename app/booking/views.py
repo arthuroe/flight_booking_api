@@ -7,6 +7,7 @@ from app.auth import token_required
 from app.flights import check_flight_is_available
 from app.models import Booking, Flight
 from app.notifications import send_email
+from app.tasks import *
 
 
 class BookingView(MethodView):
@@ -38,8 +39,12 @@ class BookingView(MethodView):
             try:
                 booking = Booking(flight_id=flight_id, user_id=user_id)
                 booking.save()
-                send_email('Booking', [current_user.username],
-                           'TEST', 'Booked Successfully')
+                send_email('Booked Flight', [current_user.username],
+                           'Booking', (
+                    f'Hey {current_user.name},\n'
+                    f'You have successfully booked {flight.flight_name} {flight.flight_number} '
+                    f'scheduled for {flight.flight_date}')
+                )
                 response = {
                     'status': 'success',
                     'message': 'Successfully booked flight.'

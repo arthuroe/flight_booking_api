@@ -1,18 +1,20 @@
 import os
 
+from celery import Celery
+from datetime import timedelta
 from flask import Flask
 from flask_mail import Mail
 
 from config import app_configuration
-
+import celeryconfig
 
 app = Flask(__name__)
-mail = Mail(app)
 
 
 environment = os.getenv("APP_SETTINGS")
 os.sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 app.config.from_object(app_configuration[environment])
+mail = Mail(app)
 
 
 from app.models import db
@@ -25,3 +27,27 @@ db.init_app(app)
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(flight_blueprint)
 app.register_blueprint(booking_blueprint)
+
+
+def make_celery(app):
+    celery = Celery(
+        app.import_name,
+        broker=app.config['CELERY_BROKER_URL'],
+        backend=os.getenv('CELERY_RESULT_BACKEND')
+    )
+    celery.conf.update(app.config)
+    celery.config_from_object(celeryconfig)
+    TaskBase = celery.Task
+
+    class ContextTask(TaskBase):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context().push():
+                return TaskBase.__call__(self, *args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
+
+
+celery = make_celery(app)
