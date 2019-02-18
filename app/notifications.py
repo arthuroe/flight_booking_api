@@ -1,13 +1,15 @@
-from threading import Thread
-from datetime import datetime, timedelta
+import logging
+import os
 
 from flask_mail import Mail, Message
+from threading import Thread
 
 from app import app, mail
 
 
 def send_async_email(app, msg):
     with app.app_context():
+        app.update
         mail.send(msg)
 
 
@@ -17,7 +19,7 @@ def send_email(subject, recipients, text_body, html_body):
     """
     try:
         msg = Message(subject, recipients=recipients)
-        msg.sender = 'jelpacho@gmail.com'
+        msg.sender = os.getenv("DEFAULT_EMAIL_SENDER")
         msg.body = text_body
         msg.html = html_body
         thr = Thread(target=send_async_email, args=[app, msg])

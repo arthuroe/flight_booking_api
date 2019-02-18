@@ -11,6 +11,7 @@ class Booking(ModelMixin):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    reminder_sent = db.Column(db.Boolean, default=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow,
                            onupdate=datetime.utcnow)
     flight_id = db.Column(db.Integer, db.ForeignKey(
