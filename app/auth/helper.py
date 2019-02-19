@@ -8,8 +8,8 @@ from app.models import User
 
 def token_required(func):
     """
-    Decorator function to ensure that a resource is access by only authenticated users
-    provided their auth tokens are valid
+    Decorator function to ensure that a resource is access by only
+    authenticated users provided their auth tokens are valid
     """
 
     @wraps(func)

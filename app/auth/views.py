@@ -37,8 +37,10 @@ class RegisterView(MethodView):
             response = {
                 'status': 'fail',
                 'message': ('Invalid Email or password provided'),
-                'required': ('Passwords should be at least 8 characters, contain'
-                             ' a digit, uppercase and lowercase characters')
+                'required': (
+                    'Passwords should be at least 8 characters, contain'
+                    ' a digit, uppercase and lowercase characters'
+                )
             }
             return make_response(jsonify(response)), 400
 

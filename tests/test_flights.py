@@ -15,8 +15,10 @@ class TestFlight(BaseTestCase):
         response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
         response = self.client.get(
-            '/api/v1/flights', headers=dict(Authorization="Bearer " + access_token,
-                                            content_type='application/json'))
+            '/api/v1/flights',
+            headers=dict(Authorization="Bearer " + access_token),
+            content_type='application/json'
+        )
         result = json.loads(response.data.decode())
         self.assertTrue(result['status'] == 'success')
         self.assertEqual(response.status_code, 200)
@@ -29,13 +31,14 @@ class TestFlight(BaseTestCase):
         response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
         response = self.client.post(
-            '/api/v1/flights', headers=dict(Authorization="Bearer " + access_token,
-                                            content_type='application/json'), data=json.dumps(dict(
-                                                name='Kenya Airways',
-                                                destination='London',
-                                                number='KQ-17',
-                                                capacity=2,
-                                                date="2019-03-12 06:30:00")), content_type='application/json')
+            '/api/v1/flights',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(dict(
+                name='Kenya Airways', destination='London', number='KQ-17',
+                capacity=2, date="2019-03-12 06:30:00"
+            )),
+            content_type='application/json'
+        )
         result = json.loads(response.data.decode())
         self.assertTrue(result['status'] == 'success')
         self.assertEqual(response.status_code, 201)
@@ -49,12 +52,14 @@ class TestFlight(BaseTestCase):
         response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
         response = self.client.post(
-            '/api/v1/flights', headers=dict(Authorization="Bearer " + access_token,
-                                            content_type='application/json'), data=json.dumps(dict(
-                                                name='Kenya Airways',
-                                                destination='London',
-                                                number='KQ-17',
-                                                capacity=2)), content_type='application/json')
+            '/api/v1/flights',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=json.dumps(dict(
+                name='Kenya Airways', destination='London', number='KQ-17',
+                capacity=2
+            )),
+            content_type='application/json'
+        )
         result = json.loads(response.data.decode())
         self.assertTrue(result['status'] == 'fail')
         self.assertEqual(response.status_code, 400)

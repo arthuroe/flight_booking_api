@@ -45,7 +45,8 @@ class BookingView(MethodView):
                 send_email('Booked Flight', [current_user.username],
                            'Booking', (
                     f'Hey {current_user.name},\n'
-                    f'You have successfully booked {flight.flight_name} {flight.flight_number} '
+                    f'You have successfully booked {flight.flight_name}'
+                    f' {flight.flight_number} '
                     f'scheduled for {flight.flight_date}')
                 )
                 response = {
