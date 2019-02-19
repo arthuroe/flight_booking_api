@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-from app.auth.views import RegisterView, LoginView
+from app.auth.views import RegisterView, LoginView, ImageUploadView
 from app.auth.helper import token_required
 
 auth_blueprint = Blueprint('auth', __name__, url_prefix='/api/v1')
@@ -15,5 +15,12 @@ login_view = LoginView.as_view('login_api')
 auth_blueprint.add_url_rule(
     '/auth/login',
     view_func=login_view,
+    methods=['POST']
+)
+
+image_upload_view = ImageUploadView.as_view('image_api')
+auth_blueprint.add_url_rule(
+    '/image_upload',
+    view_func=image_upload_view,
     methods=['POST']
 )
