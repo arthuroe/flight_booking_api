@@ -2,7 +2,6 @@ import os
 import cloudinary
 
 from celery import Celery
-from datetime import timedelta
 from flask import Flask
 from flask_mail import Mail
 
