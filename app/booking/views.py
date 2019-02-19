@@ -11,6 +11,9 @@ from app.tasks import *
 
 
 class BookingView(MethodView):
+    """
+    View for booking a flight
+    """
     decorators = [token_required]
 
     def post(self, current_user):

@@ -1,7 +1,14 @@
 import logging
+import os
+
+from app import cloudinary
+from app import app
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
 
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
+from werkzeug.utils import secure_filename
 
 from .helper import *
 from app.models import User
@@ -111,3 +118,32 @@ class LoginView(MethodView):
                 'message': 'An error has occurred. Please try again.'
             }
             return make_response(jsonify(response)), 500
+
+
+class ImageUploadView(MethodView):
+    """
+    View for uploading passport_photo
+    """
+    decorators = [token_required]
+
+    def post(self, current_user):
+        file_item = request.files['item']
+        if file_item:
+            upload_result = upload(file_item)
+            image_url = upload_result.get('url')
+            user_id = current_user.id
+            user = User.find_first(id=user_id)
+            user.passport_photo = image_url
+            user.save()
+            response = {
+                'status': 'success',
+                'message': 'Image uploaded successfully.'
+            }
+            return make_response(jsonify(response)), 201
+
+        else:
+            response = {
+                'status': 'fail',
+                'message': 'Provide a file.'
+            }
+            return make_response(jsonify(response)), 400

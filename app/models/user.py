@@ -17,6 +17,8 @@ class User(ModelMixin):
     username = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(120), nullable=False)
+    role = db.Column(db.Boolean, default=False)
+    passport_photo = db.Column(db.String(180))
     bookings = db.relationship('Booking', backref='users', lazy='dynamic')
 
     def __init__(self, username, password, name):

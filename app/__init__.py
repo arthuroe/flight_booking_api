@@ -1,4 +1,5 @@
 import os
+import cloudinary
 
 from celery import Celery
 from datetime import timedelta
@@ -51,3 +52,9 @@ def make_celery(app):
 
 
 celery = make_celery(app)
+
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUD_NAME'),
+    api_key=os.environ.get('CLOUD_API_KEY'),
+    api_secret=os.environ.get('CLOUD_API_SECRET')
+)

@@ -6,14 +6,6 @@ from dotenv import load_dotenv
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
-# # Create Celery beat schedule:
-# celery_get_manifest_schedule = {
-#     'schedule-name': {
-#         'task': 'app.tasks.periodic_run',
-#         'schedule': timedelta(seconds=50),
-#     },
-# }
-
 
 class Config:
     """Parent configuration class."""
@@ -26,7 +18,6 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CELERY_BROKER_URL = os.environ.get('REDIS_URL') or 'redis://'
     CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL') or 'redis://'
-    # CELERYBEAT_SCHEDULE = celery_get_manifest_schedule
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = os.getenv('MAIL_PORT')
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
