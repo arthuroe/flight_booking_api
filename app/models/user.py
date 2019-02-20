@@ -43,7 +43,7 @@ class User(ModelMixin):
         """
         try:
             payload = {
-                'exp': datetime.utcnow() + timedelta(hours=4),
+                'exp': datetime.utcnow() + timedelta(hours=12),
                 'iat': datetime.utcnow(),
                 'sub': user_id
             }
