@@ -1,5 +1,6 @@
 import json
 import unittest
+import os
 
 from app.models import User
 from tests import BaseTestCase
@@ -103,3 +104,20 @@ class TestAuth(BaseTestCase):
                         'Invalid Email or password provided')
         self.assertTrue(response.content_type == 'application/json')
         self.assertEqual(response.status_code, 400)
+
+    def test_upload_image(self):
+        """
+        Test successfull image upload
+        """
+        register = self.register_user('test@gmail.com', 'tesTing123', 'test')
+        login = self.login_user('test@gmail.com', 'tesTing123')
+        access_token = json.loads(login.data.decode())['auth_token']
+        asset = "test.jpg"
+        path = os.path.join(f"./tests/assets/{asset}")
+        response = self.client.post(
+            '/api/v1/image_upload',
+            headers=dict(Authorization="Bearer " + access_token),
+            data={'item': open(path, 'rb')},
+            content_type='multipart/form-data'
+        )
+        self.assertEqual(response.status_code, 201)
