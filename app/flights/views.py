@@ -4,7 +4,7 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from .helpers import get_available_flights
-from app.auth import token_required
+from app.auth import token_required, admin_required
 from app.models import Flight, db
 
 
@@ -27,6 +27,8 @@ class FlightsView(MethodView):
             }
         return make_response(jsonify(response)), 200
 
+    @token_required
+    @admin_required
     def post(self, *args, **kwargs):
         post_data = request.json
         flight_name = post_data.get('name')
