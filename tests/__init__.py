@@ -21,7 +21,7 @@ class BaseTestCase(TestCase):
         db.session.remove()
         db.drop_all()
 
-    def register_user(self, username=None, password=None, name=None):
+    def register_user(self, username=None, password=None, name=None, role=False):
         return self.client.post(
             '/api/v1/auth/register',
             data=json.dumps(
