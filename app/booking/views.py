@@ -1,9 +1,11 @@
 import logging
 
+from datetime import datetime
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
+from sqlalchemy import extract
 
-from app.auth import token_required
+from app.auth import token_required, admin_required
 from app.flights import check_flight_is_available
 from app.models import Booking, Flight
 from app.notifications import send_email
@@ -67,3 +69,39 @@ class BookingView(MethodView):
                 'message': 'Flight not available. ',
             }
             return make_response(jsonify(response)), 400
+
+
+class ReservationsView(MethodView):
+    decorators = [token_required]
+
+    @token_required
+    @admin_required
+    def get(self, current_user):
+        all_flights = Flight.fetch_all()
+        all_bookings = Booking.fetch_all()
+        days = list(set([item.created_at.strftime('%D')
+                         for item in all_bookings]))
+        reservations_per_day = {}
+        for day in days:
+            flights = []
+            for flight in all_flights:
+                date = datetime.strptime(day, '%m/%d/%y')
+                booked_flights = Booking.filter(
+                    Booking.flight_id == (flight.id)).filter(
+                    extract('day', Booking.created_at) == date.day).all()
+
+                booked_flight = {(flight.flight_number): {
+                    'bookings': [
+                        flight.serialize() for flight in booked_flights],
+                    'Number of Bookings': len(booked_flights)
+                }
+
+                }
+                flights.append(booked_flight)
+            reservations_per_day.update({day: flights})
+
+        response = {
+            'status': 'success',
+            'flights': reservations_per_day
+        }
+        return make_response(jsonify(response)), 200

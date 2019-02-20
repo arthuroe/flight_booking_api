@@ -47,6 +47,25 @@ def token_required(func):
     return decorated_function
 
 
+def admin_required(f):
+    @wraps(f)
+    def decorated(current_user, *args, **kwargs):
+        roles = current_user.role
+        if roles:
+            return f(*args, **kwargs)
+
+        response = jsonify({
+            "status": "fail",
+            "data": {
+                "message": "You are not authorized to carry out this operation",
+            }
+        })
+        response.status_code = 401
+        return response
+
+    return decorated
+
+
 def validate_email(email):
     if re.search('[^@]+@[^@]+\.[^@]+', email):
         return True

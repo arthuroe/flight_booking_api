@@ -21,13 +21,14 @@ class User(ModelMixin):
     passport_photo = db.Column(db.String(180))
     bookings = db.relationship('Booking', backref='users', lazy='dynamic')
 
-    def __init__(self, username, password, name):
+    def __init__(self, username, password, name, role=False):
         """
         Initializes the user instance
         """
         self.username = username
         self.password = Bcrypt().generate_password_hash(password).decode()
         self.name = name
+        self.role = role
 
     def password_is_valid(self, password):
         """
