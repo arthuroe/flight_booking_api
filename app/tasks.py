@@ -15,13 +15,17 @@ def periodic_run():
         for booking in all_bookings:
             flight = Flight.find_first(id=booking.flight_id)
             now = datetime.now()
-            if not flight.flight_date < now and booking.reminder_sent is False:
-                user = User.find_first(id=booking.user_id)
-                booking.reminder_sent = True
-                booking.save()
-                send_email('Reminder', [user.username],
-                           'Flight',
-                           f'Hello {user.name}\n'
-                           f'Your flight with {flight.flight_name} {flight.flight_number} is '
-                           f'tommorrow at {flight.flight_date}')
-    return 'success'
+            if now - timedelta(hours=24) <= flight.flight_date <= (
+                    now + timedelta(hours=24)):
+                if booking.reminder_sent is False:
+                    user = User.find_first(id=booking.user_id)
+                    booking.reminder_sent = True
+                    booking.save()
+                    send_email(
+                        'Reminder', [user.username],
+                        'Flight',
+                        f'Hello {user.name}\n'
+                        f'Your flight with {flight.flight_name} '
+                        f'{flight.flight_number} is '
+                        f'tommorrow at {flight.flight_date}')
+        return 'success'

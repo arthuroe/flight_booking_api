@@ -47,3 +47,13 @@ class ModelMixin(db.Model):
     def find_first(cls, **kwargs):
         """Query and filter the data of a model, returning the first result."""
         return cls.query.filter_by(**kwargs).first()
+
+    @classmethod
+    def count(cls):
+        """Return the count of all the data in the model."""
+        return cls.query.count()
+
+    @classmethod
+    def filter(cls, *args):
+        """Query and filter the data of the model."""
+        return cls.query.filter(*args)
