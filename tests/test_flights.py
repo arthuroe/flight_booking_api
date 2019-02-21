@@ -46,6 +46,16 @@ class TestFlight(BaseTestCase):
         self.assertTrue(result['status'] == 'success')
         self.assertEqual(response.status_code, 201)
 
+    def test_user_cannot_view_flights_with_invalid_token(self):
+        """
+        Test that a user cannot view flights with invalid token
+        """
+        response = self.client.get(
+            '/api/v1/flights', content_type='application/json')
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['message'] == 'Token is missing')
+        self.assertEqual(response.status_code, 401)
+
     def test_viewing_flights_after_being_added(self):
         """
         Test viewing flights with flights available
