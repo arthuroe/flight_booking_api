@@ -1,16 +1,14 @@
 import logging
 import os
 
-from app import cloudinary
-from app import app
 from cloudinary.uploader import upload
 from cloudinary.utils import cloudinary_url
-
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 from werkzeug.utils import secure_filename
 
-from .helper import *
+from app import cloudinary
+from app.auth.helpers import *
 from app.models import User
 
 

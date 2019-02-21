@@ -6,7 +6,7 @@ from flask import Flask
 from flask_mail import Mail
 
 from config import app_configuration
-import celeryconfig
+import celery_config
 
 app = Flask(__name__)
 
@@ -24,6 +24,8 @@ from app.booking import booking_blueprint
 
 db.init_app(app)
 
+from app import error_handlers
+
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(flight_blueprint)
 app.register_blueprint(booking_blueprint)
@@ -33,10 +35,10 @@ def make_celery(app):
     celery = Celery(
         app.import_name,
         broker=app.config['CELERY_BROKER_URL'],
-        backend=os.getenv('CELERY_RESULT_BACKEND')
+        backend=app.config['CELERY_RESULT_BACKEND']
     )
     celery.conf.update(app.config)
-    celery.config_from_object(celeryconfig)
+    celery.config_from_object(celery_config)
     TaskBase = celery.Task
 
     class ContextTask(TaskBase):
@@ -57,3 +59,8 @@ cloudinary.config(
     api_key=os.environ.get('CLOUD_API_KEY'),
     api_secret=os.environ.get('CLOUD_API_SECRET')
 )
+
+
+@app.route('/')
+def index():
+    return "Welcome to the Flight Booking Api"

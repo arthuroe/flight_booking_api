@@ -12,7 +12,7 @@ booking_blueprint.add_url_rule(
 
 reservation_view = ReservationsView.as_view('reservation_api')
 booking_blueprint.add_url_rule(
-    '/booking/reserve',
+    '/booking/daily',
     view_func=reservation_view,
     methods=['GET']
 )

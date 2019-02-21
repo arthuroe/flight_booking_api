@@ -3,8 +3,8 @@ import logging
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
-from .helpers import get_available_flights
 from app.auth import token_required, admin_required
+from app.flights.helpers import get_available_flights
 from app.models import Flight, db
 
 

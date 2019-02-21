@@ -105,6 +105,18 @@ class TestAuth(BaseTestCase):
         self.assertTrue(response.content_type == 'application/json')
         self.assertEqual(response.status_code, 400)
 
+    def test_validations_on_email_register(self):
+        """
+        Test validations on user input when registering.
+        """
+        response = self.register_user('test@', 'tes123', 'test')
+        data = json.loads(response.data.decode())
+        self.assertTrue(data['status'] == 'fail')
+        self.assertTrue(data['message'] ==
+                        'Invalid Email or password provided')
+        self.assertTrue(response.content_type == 'application/json')
+        self.assertEqual(response.status_code, 400)
+
     def test_upload_image(self):
         """
         Test successfull image upload

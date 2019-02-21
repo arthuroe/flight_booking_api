@@ -121,7 +121,7 @@ class TestBooking(BaseTestCase):
             content_type='application/json'
         )
         response = self.client.get(
-            '/api/v1/booking/reserve',
+            '/api/v1/booking/daily',
             headers=dict(Authorization="Bearer " + access_token),
             content_type='application/json'
         )
@@ -151,7 +151,7 @@ class TestBooking(BaseTestCase):
             content_type='application/json'
         )
         response = self.client.get(
-            '/api/v1/booking/reserve',
+            '/api/v1/booking/daily',
             headers=dict(Authorization="Bearer " + access_token),
             content_type='application/json'
         )

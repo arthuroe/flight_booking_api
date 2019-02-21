@@ -9,7 +9,6 @@ from app.auth import token_required, admin_required
 from app.flights import check_flight_is_available
 from app.models import Booking, Flight
 from app.notifications import send_email
-from app.tasks import *
 
 
 class BookingView(MethodView):
@@ -89,11 +88,13 @@ class ReservationsView(MethodView):
                 booked_flights = Booking.filter(
                     Booking.flight_id == (flight.id)).filter(
                     extract('day', Booking.created_at) == date.day).all()
-
+                users = set()
+                [users.add(booking.user_id) for booking in booked_flights]
                 booked_flight = {(flight.flight_number): {
-                    'bookings': [
-                        flight.serialize() for flight in booked_flights],
-                    'Number of Bookings': len(booked_flights)
+                    'Number of users': len(users),
+                    'Number of bookings': len(booked_flights),
+                    'Bookings': [
+                        flight.serialize() for flight in booked_flights]
                 }
 
                 }
