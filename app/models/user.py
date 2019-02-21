@@ -14,18 +14,18 @@ class User(ModelMixin):
     """
     __tablename__ = 'users'
 
-    username = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(120), nullable=False)
     role = db.Column(db.Boolean, default=False)
     passport_photo = db.Column(db.String(180))
     bookings = db.relationship('Booking', backref='users', lazy='dynamic')
 
-    def __init__(self, username, password, name, role=False):
+    def __init__(self, email, password, name, role=False):
         """
         Initializes the user instance
         """
-        self.username = username
+        self.email = email
         self.password = Bcrypt().generate_password_hash(password).decode()
         self.name = name
         self.role = role

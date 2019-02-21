@@ -43,7 +43,7 @@ class BookingView(MethodView):
             try:
                 booking = Booking(flight_id=flight_id, user_id=user_id)
                 booking.save()
-                send_email('Booked Flight', [current_user.username],
+                send_email('Booked Flight', [current_user.email],
                            'Booking', (
                     f'Hey {current_user.name},\n'
                     f'You have successfully booked {flight.flight_name}'

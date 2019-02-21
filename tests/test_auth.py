@@ -19,11 +19,11 @@ class TestAuth(BaseTestCase):
         self.assertTrue(data['auth_token'])
         self.assertEqual(response.status_code, 201)
 
-    def test_registration_with_already_registered_username(self):
+    def test_registration_with_already_registered_email(self):
         """
-        Test registration with an already registered username fails
+        Test registration with an already registered email fails
         """
-        user = User(username='test@gmail.com',
+        user = User(email='test@gmail.com',
                     password='tesTing123', name='test')
         user.save()
         response = self.register_user('test@gmail.com', 'tesTing123', 'test')
@@ -41,7 +41,7 @@ class TestAuth(BaseTestCase):
         data = json.loads(response.data.decode())
         self.assertTrue(data['status'] == 'fail')
         self.assertTrue(
-            data['message'] == 'Incomplete data. Username, name and '
+            data['message'] == 'Incomplete data. email, name and '
             'password must be provided'
         )
         self.assertEqual(response.status_code, 400)
@@ -77,7 +77,7 @@ class TestAuth(BaseTestCase):
         data = json.loads(response.data.decode())
         self.assertTrue(data['status'] == 'fail')
         self.assertTrue(data['message'] ==
-                        'Username or password not provided.')
+                        'email or password not provided.')
         self.assertTrue(response.content_type == 'application/json')
         self.assertEqual(response.status_code, 400)
 
@@ -89,7 +89,7 @@ class TestAuth(BaseTestCase):
         data = json.loads(response.data.decode())
         self.assertTrue(data['status'] == 'fail')
         self.assertTrue(data['message'] ==
-                        'Invalid Username or password provided')
+                        'Invalid email or password provided')
         self.assertTrue(response.content_type == 'application/json')
         self.assertEqual(response.status_code, 400)
 
