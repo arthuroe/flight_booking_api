@@ -1,8 +1,5 @@
 import json
 
-from datetime import datetime
-
-from app.models import User
 from tests import BaseTestCase
 
 
@@ -28,9 +25,7 @@ class TestFlight(BaseTestCase):
         """
         Test adding flight
         """
-        user = User(email='test@gmail.com',
-                    password='tesTing123', name='test', role=True)
-        user.save()
+        self.create_admin_user()
         response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
         response = self.client.post(
@@ -60,9 +55,7 @@ class TestFlight(BaseTestCase):
         """
         Test viewing flights with flights available
         """
-        user = User(email='test@gmail.com',
-                    password='tesTing123', name='test', role=True)
-        user.save()
+        self.create_admin_user()
         response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
         add_flight = self.client.post(
@@ -87,9 +80,7 @@ class TestFlight(BaseTestCase):
         """
         Test adding flight without required fields
         """
-        user = User(email='test@gmail.com',
-                    password='tesTing123', name='test', role=True)
-        user.save()
+        self.create_admin_user()
         response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
         response = self.client.post(
@@ -109,9 +100,7 @@ class TestFlight(BaseTestCase):
         """
         Test adding flight without required fields
         """
-        user = User(email='test@gmail.com',
-                    password='tesTing123', name='test')
-        user.save()
+        self.create_user()
         response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
         response = self.client.post(

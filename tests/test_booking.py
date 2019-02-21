@@ -1,8 +1,5 @@
 import json
 
-from datetime import datetime
-
-from app.models import Flight, User
 from tests import BaseTestCase
 
 
@@ -12,12 +9,7 @@ class TestBooking(BaseTestCase):
         """
         Test booking a flight Successfully
         """
-        flight = Flight(
-            flight_name='Kenya Airways', flight_number='KQ-123',
-            flight_date=datetime(2019, 3, 3, 10, 10, 10),
-            flight_destination='Kampala', capacity=45
-        )
-        flight.save()
+        self.create_flight(20)
         response1 = self.register_user('test@gmail.com', 'tesTing123', 'test')
         response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
@@ -72,12 +64,7 @@ class TestBooking(BaseTestCase):
         """
         Test booking a flight Successfully
         """
-        flight = Flight(
-            flight_name='Kenya Airways', flight_number='KQ-13',
-            flight_date=datetime(2019, 3, 3, 10, 10, 10),
-            flight_destination='Kampala', capacity=1
-        )
-        flight.save()
+        self.create_flight(1)
         response1 = self.register_user('test@gmail.com', 'tesTing123', 'test')
         response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
@@ -102,15 +89,8 @@ class TestBooking(BaseTestCase):
         """
         Test viewing reserved flights
         """
-        flight = Flight(
-            flight_name='Kenya Airways', flight_number='KQ-13',
-            flight_date=datetime(2019, 3, 3, 10, 10, 10),
-            flight_destination='Kampala', capacity=20
-        )
-        flight.save()
-        user = User(email='test@gmail.com',
-                    password='tesTing123', name='test', role=True)
-        user.save()
+        self.create_flight(20)
+        self.create_admin_user()
         response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
 
@@ -132,15 +112,8 @@ class TestBooking(BaseTestCase):
         """
         Test unauthorized viewing reserved flights
         """
-        flight = Flight(
-            flight_name='Kenya Airways', flight_number='KQ-13',
-            flight_date=datetime(2019, 3, 3, 10, 10, 10),
-            flight_destination='Kampala', capacity=20
-        )
-        flight.save()
-        user = User(email='test@gmail.com',
-                    password='tesTing123', name='test')
-        user.save()
+        self.create_flight(20)
+        self.create_user()
         response2 = self.login_user('test@gmail.com', 'tesTing123')
         access_token = json.loads(response2.data.decode())['auth_token']
 

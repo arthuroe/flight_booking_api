@@ -1,7 +1,10 @@
 import json
 
+from datetime import datetime
 from flask_testing import TestCase
+
 from app import app, db, app_configuration
+from app.models import Flight, User
 
 
 class BaseTestCase(TestCase):
@@ -35,3 +38,21 @@ class BaseTestCase(TestCase):
             data=json.dumps(dict(email=email, password=password)),
             content_type='application/json',
         )
+
+    def create_user(self):
+        user = User(email='test@gmail.com',
+                    password='tesTing123', name='test')
+        user.save()
+
+    def create_flight(self, capacity):
+        flight = Flight(
+            flight_name='Kenya Airways', flight_number='KQ-13',
+            flight_date=datetime(2019, 3, 3, 10, 10, 10),
+            flight_destination='Kampala', capacity=capacity
+        )
+        flight.save()
+
+    def create_admin_user(self):
+        user = User(email='test@gmail.com',
+                    password='tesTing123', name='test', role=True)
+        user.save()
