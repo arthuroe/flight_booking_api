@@ -10,10 +10,9 @@ This application enables a user to check and book available flights.
 - A user can login and register.
 - A user can view all available flights.
 - A user can book a flight.
-- A user can update a flight.
 - A user gets notified after booking a flight.
 - A user gets a reminder before the flight.
-- An admin can add or modify flights.
+- An admin can add flights.
 - An admin can view how many people have made reservations for a particular flight in a day.
 
 #### Development setup
@@ -43,6 +42,20 @@ This application enables a user to check and book available flights.
   - `$ pip install requiremenst.txt`
 
 - Copy `.env.sample` into `.env` in the flight_booking_api which is the base folder of the project. You should adjust it according to your own local settings.
+
+- Setup Redis
+
+  - `$ brew install redis`
+  - `$ run redis-server`
+
+- Install Celery. For more information on installing Celery for Flask Applications [this](http://flask.pocoo.org/docs/0.12/patterns/celery/).
+
+  - `$ pip install celery`
+
+- To start Celery worker and beat
+
+  - `$ celery worker -A app.celery --loglevel=INFO`
+  - `$ celery beat -A app.celery --schedule=/tmp/celerybeat-schedule --loglevel=INFO --pidfile=/tmp/celerybeat.pid`
 
 - Export the environment variables in the .env
 
