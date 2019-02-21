@@ -19,19 +19,19 @@ class RegisterView(MethodView):
 
     def post(self):
         post_data = request.json
-        username = post_data.get('username')
+        email = post_data.get('email')
         name = post_data.get('name')
         password = post_data.get('password')
 
-        if not all([username, name, password]):
+        if not all([email, name, password]):
             response = {
                 'status': 'fail',
-                'message': ('Incomplete data. Username, name and '
+                'message': ('Incomplete data. email, name and '
                             'password must be provided')
             }
             return make_response(jsonify(response)), 400
 
-        if not validate_email(username) or not validate_password(password):
+        if not validate_email(email) or not validate_password(password):
             response = {
                 'status': 'fail',
                 'message': ('Invalid Email or password provided'),
@@ -42,10 +42,10 @@ class RegisterView(MethodView):
             }
             return make_response(jsonify(response)), 400
 
-        user = User.find_first(username=post_data.get('username'))
+        user = User.find_first(email=post_data.get('email'))
         if not user:
             try:
-                user = User(username=username, password=password, name=name)
+                user = User(email=email, password=password, name=name)
                 user.save()
 
                 auth_token = user.generate_token(user.id)
@@ -77,25 +77,25 @@ class LoginView(MethodView):
 
     def post(self):
         post_data = request.json
-        username = post_data.get('username')
+        email = post_data.get('email')
         password = post_data.get('password')
 
-        if not username or not password:
+        if not email or not password:
             response = {
                 'status': 'fail',
-                'message': 'Username or password not provided.'
+                'message': 'email or password not provided.'
             }
             return make_response(jsonify(response)), 400
 
-        if not validate_email(username):
+        if not validate_email(email):
             response = {
                 'status': 'fail',
-                'message': 'Invalid Username or password provided'
+                'message': 'Invalid email or password provided'
             }
             return make_response(jsonify(response)), 400
 
         try:
-            user = User.find_first(username=username)
+            user = User.find_first(email=email)
             if user and user.password_is_valid(password):
                 auth_token = user.generate_token(user.id)
                 if auth_token:

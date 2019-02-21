@@ -22,7 +22,7 @@ def periodic_run():
                     booking.reminder_sent = True
                     booking.save()
                     send_email(
-                        'Reminder', [user.username],
+                        'Reminder', [user.email],
                         'Flight',
                         f'Hello {user.name}\n'
                         f'Your flight with {flight.flight_name} '

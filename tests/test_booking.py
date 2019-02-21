@@ -108,7 +108,7 @@ class TestBooking(BaseTestCase):
             flight_destination='Kampala', capacity=20
         )
         flight.save()
-        user = User(username='test@gmail.com',
+        user = User(email='test@gmail.com',
                     password='tesTing123', name='test', role=True)
         user.save()
         response2 = self.login_user('test@gmail.com', 'tesTing123')
@@ -138,7 +138,7 @@ class TestBooking(BaseTestCase):
             flight_destination='Kampala', capacity=20
         )
         flight.save()
-        user = User(username='test@gmail.com',
+        user = User(email='test@gmail.com',
                     password='tesTing123', name='test')
         user.save()
         response2 = self.login_user('test@gmail.com', 'tesTing123')
