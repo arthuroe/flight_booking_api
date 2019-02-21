@@ -1,8 +1,6 @@
 import json
-import unittest
 import os
 
-from app.models import User
 from tests import BaseTestCase
 
 
@@ -23,9 +21,7 @@ class TestAuth(BaseTestCase):
         """
         Test registration with an already registered email fails
         """
-        user = User(email='test@gmail.com',
-                    password='tesTing123', name='test')
-        user.save()
+        self.create_user()
         response = self.register_user('test@gmail.com', 'tesTing123', 'test')
         data = json.loads(response.data.decode())
         self.assertTrue(data['status'] == 'fail')
@@ -133,3 +129,18 @@ class TestAuth(BaseTestCase):
             content_type='multipart/form-data'
         )
         self.assertEqual(response.status_code, 201)
+
+    def test_unsuccessful_upload_image(self):
+        """
+        Test unsuccessfull image upload
+        """
+        register = self.register_user('test@gmail.com', 'tesTing123', 'test')
+        login = self.login_user('test@gmail.com', 'tesTing123')
+        access_token = json.loads(login.data.decode())['auth_token']
+        response = self.client.post(
+            '/api/v1/image_upload',
+            headers=dict(Authorization="Bearer " + access_token),
+            data={'item': 'item'},
+            content_type='multipart/form-data'
+        )
+        self.assertEqual(response.status_code, 400)
