@@ -67,15 +67,3 @@ This application enables a user to check and book available flights.
 
 - Run the application
   - `$ python run.py`
-
-#### API Routes
-
-| No  |       End Point       | Method |                    Functionality |
-| --- | :-------------------: | -----: | -------------------------------: |
-| 1   | /api/v1/auth/register |   POST |                   Registers User |
-| 2   |  /api/v1/auth/login   |   POST |                       User login |
-| 3   | /api/v1/image_upload  |   POST |                  Upload an image |
-| 4   |    /api/v1/flights    |    GET |                     View flights |
-| 5   |    /api/v1/flights    |   POST |                    Adds a flight |
-| 6   |    /api/v1/booking    |   POST |                   Books a flight |
-| 7   | /api/v1/booking/daily |    GET | Views bookings on flight per day |

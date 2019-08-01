@@ -83,7 +83,7 @@ class TestBooking(BaseTestCase):
         )
         result = json.loads(response.data.decode())
         self.assertTrue(result['status'] == 'fail')
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 200)
 
     def test_viewing_reserved_flights(self):
         """
