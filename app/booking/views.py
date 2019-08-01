@@ -22,7 +22,6 @@ class BookingView(MethodView):
 
         flight_id = post_data.get('flight_id')
         user_id = current_user.id
-
         if not flight_id:
             response = {
                 'status': 'fail',
@@ -67,7 +66,7 @@ class BookingView(MethodView):
                 'status': 'fail',
                 'message': 'Flight not available. ',
             }
-            return make_response(jsonify(response)), 400
+            return make_response(jsonify(response)), 200
 
 
 class ReservationsView(MethodView):
