@@ -18,10 +18,10 @@ class BookingView(MethodView):
     decorators = [token_required]
 
     def post(self, current_user):
-        post_data = request.json
-
-        flight_id = post_data.get('flight_id')
+        kwargs = request.json
+        flight_id = kwargs.get('flight_id')
         user_id = current_user.id
+
         if not flight_id:
             response = {
                 'status': 'fail',
@@ -40,7 +40,7 @@ class BookingView(MethodView):
 
         if check_flight_is_available(flight):
             try:
-                booking = Booking(flight_id=flight_id, user_id=user_id)
+                booking = Booking(**kwargs)
                 booking.save()
                 send_email('Booked Flight', [current_user.email],
                            'Booking', (

@@ -32,8 +32,9 @@ class TestFlight(BaseTestCase):
             '/api/v1/flights',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(dict(
-                name='Kenya Airways', destination='London', number='KQ-17',
-                capacity=2, date="2019-03-12 06:30:00"
+                flight_name='Kenya Airways', flight_destination='London',
+                flight_number='KQ-17', capacity=2,
+                flight_date="2019-03-12 06:30:00"
             )),
             content_type='application/json'
         )
@@ -62,8 +63,9 @@ class TestFlight(BaseTestCase):
             '/api/v1/flights',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(dict(
-                name='Kenya Airways', destination='London', number='KQ-17',
-                capacity=2, date="2019-03-12 06:30:00"
+                flight_name='Kenya Airways', flight_destination='London',
+                flight_number='KQ-17', capacity=2,
+                flight_date="2019-03-12 06:30:00"
             )),
             content_type='application/json'
         )
@@ -87,8 +89,8 @@ class TestFlight(BaseTestCase):
             '/api/v1/flights',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(dict(
-                name='Kenya Airways', destination='London', number='KQ-17',
-                capacity=2
+                flight_name='Kenya Airways', flight_destination='London',
+                flight_number='KQ-17', capacity=2
             )),
             content_type='application/json'
         )
@@ -107,8 +109,8 @@ class TestFlight(BaseTestCase):
             '/api/v1/flights',
             headers=dict(Authorization="Bearer " + access_token),
             data=json.dumps(dict(
-                name='Kenya Airways', destination='London', number='KQ-17',
-                capacity=2
+                flight_name='Kenya Airways', flight_destination='London',
+                flight_number='KQ-17', capacity=2
             )),
             content_type='application/json'
         )
