@@ -30,14 +30,11 @@ class FlightsView(MethodView):
     @token_required
     @admin_required
     def post(self, *args, **kwargs):
-        post_data = request.json
-        flight_name = post_data.get('name')
-        flight_destination = post_data.get('destination')
-        flight_date = post_data.get('date')
-        flight_number = post_data.get('number')
-        capacity = post_data.get('capacity')
-
-        if not all([flight_name, flight_destination, flight_date]):
+        kwargs = request.json
+        if not all(
+                [kwargs.get('flight_name'), kwargs.get(
+                    'flight_destination'), kwargs.get('flight_date')]
+        ):
             response = {
                 'status': 'fail',
                 'message': ('Incomplete data. All fields are required')
@@ -45,11 +42,7 @@ class FlightsView(MethodView):
             return make_response(jsonify(response)), 400
 
         try:
-            flight = Flight(
-                flight_number=flight_number, flight_name=flight_name,
-                flight_destination=flight_destination, flight_date=flight_date,
-                capacity=capacity
-            )
+            flight = Flight(**kwargs)
             flight.save()
 
             response = {

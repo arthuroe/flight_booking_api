@@ -18,12 +18,11 @@ class RegisterView(MethodView):
     """
 
     def post(self):
-        post_data = request.json
-        email = post_data.get('email')
-        name = post_data.get('name')
-        password = post_data.get('password')
+        kwargs = request.json
+        email = kwargs.get('email')
+        password = kwargs.get('password')
 
-        if not all([email, name, password]):
+        if not all([email, password, kwargs.get('name')]):
             response = {
                 'status': 'fail',
                 'message': ('Incomplete data. email, name and '
@@ -42,10 +41,10 @@ class RegisterView(MethodView):
             }
             return make_response(jsonify(response)), 400
 
-        user = User.find_first(email=post_data.get('email'))
+        user = User.find_first(email=email)
         if not user:
             try:
-                user = User(email=email, password=password, name=name)
+                user = User(**kwargs)
                 user.save()
 
                 auth_token = user.generate_token(user.id)
