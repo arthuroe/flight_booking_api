@@ -27,7 +27,7 @@ idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10
 kombu==4.3.0
-Mako==1.0.7
+Mako==1.2.2
 MarkupSafe==1.1.0
 mock==2.0.0
 more-itertools==5.0.0
